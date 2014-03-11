@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="fr">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>d3js</title>
+
+		<meta name="description" content="Dataviz avec d3js">
+		<meta name="author" content="Julien Buret">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css">
+
+
+		<script src="node_modules/d3/d3.js"></script>
+		<script src="js/data.js"></script>
+		<script src="js/graphData.js"></script>
+		<script src="js/graph.js"></script>
+		<script src="js/simple.js"></script>
+		<script src="js/force.js"></script>
+		<script src="js/histogram.js"></script>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Datavisualization with D3</h1>
+					<h2>Data Driven Document</h2>
+					<p>
+						<small>Created by Julien Buret / <a href="http://twitter.com/julien_buret">@julien_buret</a></small>
+					</p>
+				</section>
+
+				<!-- INTRODUCTION CHAPTER -->
+				<section>
+					<section>
+						<h1>D3.js</h1>
+						<h2>Not new presentation element</h2>
+						<h2>Map data to element</h2>
+					</section>
+					<section>
+						<h1>Using Web standard</h1>
+						<h3>SVG</h3>
+						<h3>CSS</h3>
+						<h3>JS</h3>
+					</section>
+					<section>
+						<h2>The main purpose of d3 are transform, manipulate your data and map them to SVG element</h2>
+					</section>
+					<section>
+						<h1>SVG</h1>
+							<svg width="300" height="100">
+								<rect y="1" x="1" width="298" height="98" fill="white" stroke="black"/>
+								<text x="5" y="50">Hello world in SVG</text>
+							</svg>
+						<pre><code data-trim>
+<svg width="300" height="100">
+  <rect fill="white" stroke="black"/>
+  <text x="10" y="20">Hello world in SVG</text>
+</svg>
+						</code></pre>
+					</section>
+
+					<section>
+						<style>
+							.intro-rect {
+								fill: gray;
+								opacity: 0.3;
+								stroke: black;
+								stroke-width: 4;
+							}
+
+							.intro-text {
+								font-size: 42;
+								fill: steelblue;
+								stroke: black;
+								stroke-width: 1px;
+							}
+						</style>
+						<h1>SVG + CSS</h1>
+							<svg width="300" height="100">
+								<rect y="1" x="1" width="298" height="98" class="intro-rect"/>
+								<text x="5" y="50" class="intro-text">Hello world in SVG</text>
+							</svg>
+						<pre><code data-trim>
+<style>
+  .intro-rect {
+    fill: gray;
+    opacity: 0.3;
+    stroke: black;
+    stroke-width: 4;
+  }
+
+  .intro-text {
+    font-size: 34;
+    fill: white,
+    stroke: black
+  }
+</style>
+						</code></pre>
+					</section>
+				</section>
+
+				<!-- Draw basic shape chapiter -->
+				<section>
+					<section>
+						<h1>Draw basic form with D3</h1>
+					</section>
+
+					<section>
+						<h3>Circle</h3>
+						<pre><code data-trim>
+	var svg = d3.select("#d3-slide1").append("svg");
+	svg.attr("width", 200).attr("height", 200);
+	svg.append("circle")
+		.attr("cx", 50)
+		.attr("cy", 50)
+		.attr("r", 30)
+		.attr("fill","red")
+		.attr("stroke","black")
+	    				</code></pre>
+	    				<div id="d3_slide_circl" style="width: 960px; height:150px"></div>
+					</section>
+
+					<section>
+						<h3>Rectangle</h3>
+						<pre><code data-trim>
+	var svg = d3.select("#d3-slide1").append("svg");
+	svg.attr("width", 200).attr("height", 200);
+	svg.append("rect")
+		.attr("x", 75)
+		.attr("y", 10)
+		.attr("width", 50)
+		.attr("height", 100)
+		.attr("fill","blue")
+		.attr("stroke","black")
+	    				</code></pre>
+	    				<div id="d3_slide_rect" style="width: 960px; height:150px"></div>
+					</section>
+
+					<section>
+						<h3>Path</h3>
+						<pre><code data-trim>
+var lineData = [ { "x": -5,   "y": 25},  { "x": -4,  "y": 16},
+                  { "x": -3,  "y": 9}, { "x": -2,  "y": 4},
+                  { "x": -1,  "y": 1},  { "x": 0, "y": 0},
+                  { "x": 1,   "y": 1},  { "x": 2,  "y": 4},
+                  { "x": 3,  "y": 9}, { "x": 4,  "y": 16},
+                  { "x": 5,  "y": 25}];
+var lineFunction = d3.svg.line()
+	.x(function(d) { return (d.x * 20) + 150; })
+	.y(function(d) { return -(d.y * 5) + 180; })
+	.interpolate("basis");
+
+var lineGraph = svg.append("path")
+    .attr("d", lineFunction(lineData))
+    .attr("stroke", "blue")
+    .attr("stroke-width", 3)
+    .attr("fill", "none");
+	    				</code></pre>
+	    				<div id="d3_slide_path" style="width: 960px; height:200px"></div>
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h1>Selection and manipulation</h1>
+					</section>
+					<section>
+						<h1>Selection</h1>
+						<h2>Select an element</h2>
+						<pre><code data-trim>
+// Select body
+var body = d3.select("body")
+
+// Select an element by id
+var byId = d3.select("#id_my_element")
+						</code></pre>
+						<h2>Select all element</h2>
+						<pre><code data-trim>
+// Select all rect
+d3.selectAll("rect")
+						</code></pre>
+					</section>
+
+					<section>
+						<h1>Append</h1>
+						<h2>Single</h2>
+						<pre><code data-trim>
+// Select svg element
+var svg = d3.select("svg")
+
+// Append a rectangle
+var rect = svg.append("rect")
+rect.attr("x", 10)
+rect.attr("y", 10)
+rect.attr("width", 30)
+rect.attr("height", 30)
+						</code></pre>
+						<h2>Collection</h2>
+						<pre><code data-trim>
+d3.selectAll("section")
+  .append("text")
+						</code></pre>
+					</section>
+					<section>
+						<h1>Data manipulation</h1>
+						<h2>Data are array</h2>
+						<h3>Number</h3>
+						<pre><code data-trim>
+var oneDim = [1,2,3,5]
+var twoDim = [[1,1],[2,5],[3,6]]
+						</code></pre>
+						<h3>Or Object</h3>
+						<pre><code data-trim>
+var complexData = [
+  {x: 100, y: 80, count: 12},
+  {x: 120, y: 60, count: 20},
+  {x: 140, y: 40, count: 8},
+  {x: 120, y: 120, count: 17}
+]
+						</code></pre>
+					</section>
+					<section>
+						<h1>Data to Element</h1>
+						<h2>Create a circle selection mapped to data</h2>
+						<pre><code data-trim>
+var complexData = [
+  {x: 100, y: 80, count: 12},
+  {x: 120, y: 60, count: 20},
+  {x: 140, y: 40, count: 8},
+  {x: 120, y: 120, count: 17}
+]
+
+svg.selectAll("circle")
+  .data(complexData)
+  .enter().append("circ")
+  .attr("cx", function(d){return d.x})
+  .attr("cy", function(d){return d.y})
+  .attr("r", function(d){return d.count})
+						</code></pre>
+					</section>
+					<section>
+						<h1>Data to Element</h1>
+						<h2>Result</h2>
+						<div id="select_data_to_circle"/>
+					</section>
+					<section>
+						<h1>.data()</h1>
+						<ul>
+							<li>Create multiple element</li>
+							<li>Compute join</li>
+							<li>Use .enter() for appending missing element</li>
+						</ul>
+					</section>
+					<section>
+					<h1>TODO ENTER UPDATE EXIST AND JOIN</h1>
+					</section>
+				</section>
+
+
+				<!-- GRAPH SECTION -->
+				<!-- 1. Scale manipulation -->
+				<!-- 2. Draw Axes + Ticks + Legend -->
+				<!-- 3.	Draw path -->
+				<!-- 4. Draw histogram -->
+
+				<!-- D3 LAYOUT -->
+				<!-- Treemap Layout (Overview) -->
+				<!-- Sun Brust (Exemple with filesystem) -->
+				<!-- Force Layout (Exemple with twitter) -->
+
+
+				<section>
+					<style>
+						.axis_d3_h1_axes {
+						  font: 16px sans-serif;
+						}
+
+						.axis_d3_h1_axes path,
+						.axis_d3_h1_axes line {
+						  fill: none;
+						  stroke: #000;
+						  shape-rendering: crispEdges;
+						}
+
+						.x.axis_d3_h1_axes path {
+						  display: none;
+						}
+
+						.line_d3_h1_axes {
+						  fill: none;
+						  stroke: steelblue;
+						  stroke-width: 2px;
+						}
+
+						.point {
+						  fill: white;
+						  stroke: steelblue;
+						  stroke-width: 2px;
+						}
+
+						.legend text {
+							font: 16px sans-serif;
+						}
+
+						.grid .tick {
+						    stroke: lightgrey;
+						    opacity: 1;
+						}
+
+						.grid path {
+						    stroke-width: 0;
+						}
+					</style>
+					<section>
+						<h1>Graph function or data</h1>
+					</section>
+					<section data-markdown>
+
+						<script type="text/template">
+							## Draw your graph with d3
+
+							- Create the SVG canvas
+							- Load some data
+							- Define scale
+							- Draw axes
+							- Draw function or data
+							- add label, change color, configure ticks, etc
+    					</script>
+					</section>
+					<section>
+						<h2>Create SVG canvas</h2>
+						<pre><code data-trim>
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var svg = d3.select("#my_svg").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	    				</code></pre>
+					</section>
+
+					<section data-markdown>
+						<script type="text/template">
+							## Loading data
+
+							- d3.xhr
+							- d3.tsv
+							- d3.json
+							- d3.xml
+							- Use other library (JQuery, AngularJS, etc)
+    					</script>
+					</section>
+
+					<section>
+						<h2>For this demo, we use static data in a var</h2>
+						<pre><code data-trim>
+var data = [[1393940673, 14], [1393940683, 27], ...
+	    				</code></pre>
+					</section>
+
+
+					<section>
+						<h2>Define scale</h2>
+						<h3>Exemple: Linear scale</h3>
+						<pre><code data-trim>
+var y = d3.scale.linear().range([height,0]);
+y.domain([0,d3.max(data, function (d) {return d[1]})]);
+var axey = d3.svg.axis().scale(y).orient('left');
+svg.append('g').attr('class', 'axis').call(axey);
+	    				</code></pre>
+						<h3>Exemple: Linear time scale</h3>
+						<pre><code data-trim>
+var x = d3.time.scale().range([0,width]);
+x.domain(d3.extent(data, function (d) {
+	return new Date(d[0] * 1000);
+}));
+var axex = d3.svg.axis().scale(x).orient('bottom');
+var xaxis = svg.append('g').attr('class', 'axis').attr('transform', 'translate(0,' + height + ')').call(axex);
+xaxis.selectAll('text').style('text-anchor', 'end').attr('dx', '-.8em').attr('dy', '.15em').attr('transform', function () {
+	return 'rotate(-60)';
+});
+	    				</code></pre>
+					</section>
+
+					<section>
+						<h2>Draw axes</h2>
+						<div id="d3_h1_axes" style="width: 960px; height:400px"></div>
+					</section>
+
+					<section>
+						<h1>Draw axes CSS</h1>
+						<h2>CSS</h2>
+							<pre><code data-trim>
+.axis_d3_h1_axes {
+	font: 16px sans-serif;
+}
+.axis_d3_h1_axes path,
+.axis_d3_h1_axes line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+.x.axis_d3_h1_axes path {
+	display: none;
+}
+.line_d3_h1_axes {
+	fill: none;
+	stroke: steelblue;
+	stroke-width: 2px;
+}
+							</code></pre>
+					</section>
+
+					<section>
+						<h2>Draw axes with CSS</h2>
+						<div id="d3_h1_axes_css" style="width: 960px; height:400px"></div>
+					</section>
+
+					<section>
+						<h2>Draw data</h2>
+						<pre><code data-trim>
+var line = d3.svg.line()
+	.x(function (d) {return x(d[0] * 1000);})
+	.y(function (d) {return y(d[1]);});
+svg.append('path').datum(data).attr('class', 'line_d3_h1_axes').attr('d', line);
+	    				</code></pre>
+					</section>
+
+					<section>
+						<h2>Draw data</h2>
+						<div id="d3_h1_path1" style="width: 960px; height:400px"></div>
+					</section>
+
+					<section>
+						<h2>SVG et CSS</h2>
+						<pre><code data-trim>
+
+							</code></pre>
+					</section>
+
+
+					<section>
+						<h2>Finaliser le graphe</h2>
+						<div id="d3_h1_final" style="width: 960px; height:400px"></div>
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h1>Visualiser une distribution</h1>
+						<h2>Histogramme</h2>
+					</section>
+					<section data-markdown>
+					<script type="text/template">
+							## Histogramme
+
+							- Utiliser une échelle discrète
+							- Dessiner un histogramme
+    					</script>
+    				</section>
+    				<section>
+						<h2>Utiliser une échelle discrète</h2>
+						<pre><code data-trim>
+var x = d3.scale.ordinal().rangeRoundBands([0,width], 0.1);
+x.domain(distributionData.map(function (d) {return d[0];}));
+var axex = d3.svg.axis().scale(x).orient('bottom');
+var xaxis = svg.append('g').attr('class', 'axis').attr('transform', 'translate(0,' + height + ')').call(axex);
+xaxis.selectAll('text').style('text-anchor', 'end').attr('dx', '-.8em').attr('dy', '.15em').attr('transform', function () {
+	return 'rotate(-60)';
+});
+	    				</code></pre>
+					</section>
+					<section>
+						<h2>Utiliser une échelle discrète</h2>
+						<div id="histo_axes"></div>
+					</section>
+
+					<section>
+						<h2>Dessiner l'histogramme</h2>
+						<pre><code data-trim>
+var x = d3.scale.ordinal().rangeRoundBands([0,width], 0.1);
+x.domain(distributionData.map(function (d) {return d[0];}));
+var axex = d3.svg.axis().scale(x).orient('bottom');
+var xaxis = svg.append('g').attr('class', 'axis').attr('transform', 'translate(0,' + height + ')').call(axex);
+xaxis.selectAll('text').style('text-anchor', 'end').attr('dx', '-.8em').attr('dy', '.15em').attr('transform', function () {
+	return 'rotate(-60)';
+});
+	    				</code></pre>
+					</section>
+					<section>
+						<h2>Ajouter la distribution</h2>
+						<pre><code data-trim>
+var line = d3.svg.line().interpolate('basis').x(function (d) {
+  return x(d.key);
+}).y(function (d) {
+  return y1(d.totalcount / distributionDataFull.total);
+});
+svg.datum(distributionData);
+svg.append('path').attr('class', 'line').attr('d', line).style('stroke', 'orange')
+.style('fill', 'none').style('stroke-width', '2px');
+	    				</code></pre>
+					</section>
+					<section>
+						<h2>Dessiner la grille</h2>
+						<pre><code data-trim>
+var ygrid = d3.svg.axis().scale(y1).orient('left');
+svg.append('g').attr('class', 'grid').call(ygrid.tickSize(-width, 0, 0).tickFormat(''));
+	    				</code></pre>
+					</section>
+					<section>
+						<h2>Résultat</h2>
+						<div id="histo_1"></div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>D3 Layout</h1>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Display Hierarchical data</h1>
+					</section>
+				</section>
+
+
+				<section>
+					<section>
+						<h1>Display graph data</h1>
+					</section>
+
+					<section>
+						<h1>First Result</h1>
+						<div id="force_layout_1" style="height: 600px; width: 960px"/>
+
+					</section>
+
+					<section>
+						<h1>Using group info</h1>
+						<div id="force_layout_2" style="height: 600px; width: 960px"/>
+
+					</section>
+				</section>
+
+
+			</div>
+
+		</div>
+
+
+
+		<script>
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        	{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+
+	<script src="js/activation.js"></script>
+</html>
